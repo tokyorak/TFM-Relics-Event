@@ -125,11 +125,18 @@ function displayRelicsByMap(){
         items.sort((a, b) => a.Pos.localeCompare(b.Pos));
 
         // display the items
-        tableHTML += `<tr><th id="${map.toLowerCase()}" rowspan="${items.length + 1}">${map}</th></tr>`;
+
+        // add a special class for the th element of each map section, so that we can style it differently
+        var headerClass = 'map'
+        tableHTML += `<tr><th class="${map}" id="${map.toLowerCase()}" rowspan="${items.length + 1}">${map}</th></tr>`;
         for(var i = 0; i < items.length; ++i)
         {
             var locationFullForm = locationDefinitions[items[i].Pos];
-            tableHTML += `<tr><td headers="item ${map.toLowerCase()}">${items[i].Item}</td><td headers="location ${map.toLowerCase()}">${locationFullForm}</td></tr>`;
+
+            // add a special class for the last row of each map section, so that we can style it differently
+            var rowClass = (i === items.length - 1) ? 'last-row' : '';
+
+            tableHTML += `<tr class="${rowClass}"><td headers="item ${map.toLowerCase()}">${items[i].Item}</td><td headers="location ${map.toLowerCase()}">${locationFullForm}</td></tr>`;
         }
     }
 
