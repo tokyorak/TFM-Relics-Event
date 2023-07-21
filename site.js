@@ -27,7 +27,6 @@ window.onload = function () {
         // restore the state of the checkbox
         checkbox.checked = localStorage.getItem(checkbox.id) === 'true';
 
-        // checkboxes[i].addEventListener('change', displayRelicsByMap);
         checkboxes[i].addEventListener('change', function(){
             // save the state of the checkbox whenever it changes
             localStorage.setItem(this.id, this.checked);
@@ -100,14 +99,10 @@ function displayRelicsByMap(){
         items.sort((a, b) => a.Pos.localeCompare(b.Pos));
 
         // display the items
-        // console.log(map + ':');
-        // tableHTML += '<tr><th id="' + map.toLowerCase() + '" rowspan="' + items.length + 1 + '">' + map + '</th></tr>';
         tableHTML += `<tr><th id="${map.toLowerCase()}" rowspan="${items.length + 1}">${map}</th></tr>`;
         for(var i = 0; i < items.length; ++i)
         {
             var locationFullForm = locationDefinitions[items[i].Pos];
-            // console.log(' ' + items[i].Item + ' at ' + items[i].Pos);
-            // tableHTML += '<tr><td headers="item ' + map.toLowerCase() + '">' + items[i].Item + '</td><td headers="location ' + map.toLowerCase() + '">' + items[i].Pos + '</td></tr>';
             tableHTML += `<tr><td headers="item ${map.toLowerCase()}">${items[i].Item}</td><td headers="location ${map.toLowerCase()}">${locationFullForm}</td></tr>`;
         }
     }
