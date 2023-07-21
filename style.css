@@ -1,19 +1,34 @@
-.relics-group{
+/* .relics-group{
     display: grid;
     grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 20px;
     align-items: center;
     margin-bottom: 20px;
-}
-
+} */
+/* 
 .checkbox-item {
     display: flex;
     align-items: center;
     justify-content: center;
-}
+} */
 
 .checkbox-item label{
     margin-right: 10px;
+}
+
+.relics-group{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-item{
+    flex: 1 0 auto;
+    margin: 5px;
+}
+
+.checkbox-item button{
+    padding: 5px;
+    margin: 5px;
 }
 
 html {

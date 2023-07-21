@@ -1,25 +1,43 @@
 window.onload = function () {
     // create relic forms
-    var relicsA = document.getElementById('relicsA');
-    var relicsB = document.getElementById('relicsB');
-    var relicsC = document.getElementById('relicsC');
-    var relicsD = document.getElementById('relicsD');
-    var relicsE = document.getElementById('relicsE');
-    var relicsF = document.getElementById('relicsF');
+    var relics = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-    for(var i = 1; i <= 10; ++i)
-    {
-        // for A relics
-        relicsA.innerHTML += createRelicForm('A', i);
-        //for all other relics
-        relicsB.innerHTML += createRelicForm('B', i);
-        relicsC.innerHTML += createRelicForm('C', i);
-        relicsD.innerHTML += createRelicForm('D', i);
-        relicsE.innerHTML += createRelicForm('E', i);
-        relicsF.innerHTML += createRelicForm('F', i);
-    }
+    relics.forEach(function (relic) {
+        // create a div and buttons for each relic type
+        var relicDiv = document.getElementById('relics' + relic);
+        var checkAllButton = document.createElement('button');
+        var resetButton = document.createElement('button');
 
-    // Atach event listeners to checkboxes
+        checkAllButton.textContent = 'Check All';
+        checkAllButton.className = 'checkbox-item';
+
+        resetButton.textContent = 'Reset ' + relic;
+        resetButton.className = 'checkbox-item';
+
+        checkAllButton.addEventListener('click', function () {
+            checkOrResetLine(relic, true);
+        });
+
+        resetButton.addEventListener('click', function () {
+            checkOrResetLine(relic, false);
+        });
+
+        relicDiv.appendChild(checkAllButton);
+        relicDiv.appendChild(resetButton);
+        
+        for(var i = 1; i <= 10; ++i)
+        {
+            // don't do innerHTML after appending the buttons, event listeners will be lost since innerHTML recreates the DOM from scratch
+            // relicDiv.innerHTML += createRelicForm(relic, i);
+            var relicForm = createRelicForm(relic, i);
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = relicForm;
+            relicDiv.appendChild(wrapper.firstElementChild);
+        }
+        
+    });
+
+    // Attach event listeners to checkboxes
     var checkboxes = document.querySelectorAll('input[type="checkbox"]');
     for(var i = 0; i < checkboxes.length; ++i)
     {
@@ -30,18 +48,16 @@ window.onload = function () {
         checkboxes[i].addEventListener('change', function(){
             // save the state of the checkbox whenever it changes
             localStorage.setItem(this.id, this.checked);
+            // refresh the relics location table after a checkbox is changed
             displayRelicsByMap();
         });
     }
 
-    // reset button
+    // reset button for all relics
     document.getElementById('reset-button').addEventListener('click', function(){
-        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-        for(var i = 0; i < checkboxes.length; ++i)
-        {
-            checkboxes[i].checked = false;
-        }
-        displayRelicsByMap();
+        relics.forEach(function(relic){
+            checkOrResetLine(relic, false);
+        });
     });
 
     displayRelicsByMap();
@@ -49,11 +65,21 @@ window.onload = function () {
 
 function createRelicForm(group, number){
     return `
-        <div class="checkbox-item">
+        <div class="checkbox-item relic">
             <label for = "${group}${number}"> ${group}${number} </label>
             <input type = "checkbox" id = "${group}${number}" name = "${group}${number}">
         </div>
         `;
+}
+
+function checkOrResetLine(line, isChecked){
+    for(var i = 1; i <= 10; ++i)
+    {
+        var checkbox = document.getElementById(line + i);
+        checkbox.checked = isChecked;
+        localStorage.setItem(checkbox.id, checkbox.checked);
+    }
+    displayRelicsByMap();
 }
 
 function findRelicsInMaps(){
